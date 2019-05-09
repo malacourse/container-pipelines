@@ -57,8 +57,8 @@ pipeline {
     stage('Promote from Build to Dev') {
       agent { label 'ansible-slave' }
       steps {
-        git url: "${APPLICATION_SOURCE_REPO}", branch: "${APPLICATION_SOURCE_REF}"
-
+        //git url: "${APPLICATION_SOURCE_REPO}", branch: "${APPLICATION_SOURCE_REF}"
+        ls -lrt .
         sh """
           ansible-galaxy install -r ./requirements.yml -p .
           ansible-playbook -i ./.applier -p /openshift-applier/playbooks/openshift-cluster-seed.yml 
