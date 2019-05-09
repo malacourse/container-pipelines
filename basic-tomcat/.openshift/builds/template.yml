@@ -40,6 +40,10 @@ objects:
           value: "${APPLICATION_SOURCE_REF}"
         - name: "BUILD_CONTEXT_DIR"
           value: "${APPLICATION_CONTEXT_DIR}"
+        - name: "ANSIBLE_CONTEXT_DIR"
+          value: "${CONTEXT_DIR}"
+        - name: "ANSIBLE_INVENTORY_DIR"
+          value: "${INVENTORY_DIR}"
 - apiVersion: v1
   kind: BuildConfig
   metadata:
@@ -89,6 +93,9 @@ parameters:
 - description: Path within Git project to build; empty for root project directory.
   name: CONTEXT_DIR
   value: "basic-tomcat"
+- description: path to inventory dir
+  name: INVENTORY_DIR
+  value: "basic-tomcat/.applier"
 - description: Path within Git project pointing to the pipeline run script
   name: PIPELINE_SCRIPT
   value: Jenkinsfile
