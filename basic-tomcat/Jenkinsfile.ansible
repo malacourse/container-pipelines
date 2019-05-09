@@ -59,7 +59,7 @@ pipeline {
       steps {
         //git url: "${APPLICATION_SOURCE_REPO}", branch: "${APPLICATION_SOURCE_REF}"
         sh """
-          ls -lrt ${env.ANSIBLE_CONTEXT_DIR}"
+          ls -lrt ${env.ANSIBLE_CONTEXT_DIR}
           ansible-galaxy install -r .${env.ANSIBLE_CONTEXT_DIR}/requirements.yml -p .
           ansible-playbook -i ${env.ANSIBLE_INVENTORY_DIR} -p /openshift-applier/playbooks/openshift-cluster-seed.yml 
         """
