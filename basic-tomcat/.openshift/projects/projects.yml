@@ -4,24 +4,6 @@ items:
 - kind: ProjectRequest
   apiVersion: v1
   metadata:
-    name: basic-tomcat-dev
+    name: rh-demo-dev
     creationTimestam: null
-  displayName: Basic Tomcat App - Dev
-- kind: ProjectRequest
-  apiVersion: v1
-  metadata:
-    name: basic-tomcat-stage
-    creationTimestam: null
-  displayName: Basic Tomcat App - Stage
-- kind: ProjectRequest
-  apiVersion: v1
-  metadata:
-    name: basic-tomcat-prod
-    creationTimestam: null
-  displayName: Basic Tomcat App - Prod
-- kind: ProjectRequest
-  apiVersion: v1
-  metadata:
-    name: basic-tomcat-build
-    creationTimestam: null
-  displayName: Basic Tomcat App - Build
+  displayName: Redhat Pipeline Demo - Dev
