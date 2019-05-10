@@ -8,5 +8,6 @@ openshift_cluster_content:
 - object: deployments
   content:
   - name: basic-tomcat-dev
+    namespace: "{{ NAMESPACE }}"
     template: "{{ inventory_dir }}/../.openshift/deployment/template.yml"
     params: "{{ inventory_dir }}/../.openshift/deployment/dev/params"
