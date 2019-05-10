@@ -141,8 +141,8 @@ parameters:
   name: APPLICATION_NAME
   required: true
   value: jws-app
-- description: The environment
-  name: ENV
+- description: The namespace to deploy to
+  name: NAMESPACE
   required: true
 - description: Name of a service account that can deploy to this project
   name: SA_NAME
