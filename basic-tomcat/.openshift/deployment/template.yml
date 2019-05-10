@@ -13,7 +13,7 @@ objects:
     labels:
       app: ${APPLICATION_NAME}
     name: ${APPLICATION_NAME}
-    namespace: ${APPLICATION_NAME}${ENV}
+    namespace: ${NAMESPACE}
   spec:
     replicas: 1
     selector:
@@ -67,7 +67,7 @@ objects:
     labels:
       app: ${APPLICATION_NAME}
     name: ${APPLICATION_NAME}
-    namespace: ${APPLICATION_NAME}${ENV}
+    namespace: ${NAMESPACE}
 - apiVersion: v1
   id: ${APPLICATION_NAME}-http
   kind: Route
@@ -77,7 +77,7 @@ objects:
     labels:
       app: ${APPLICATION_NAME}
     name: ${APPLICATION_NAME}
-    namespace: ${APPLICATION_NAME}${ENV}
+    namespace: ${NAMESPACE}
   spec:
     host: ${HOSTNAME_HTTP}
     path: ${ROUTE_PATH}
@@ -91,7 +91,7 @@ objects:
     labels:
       app: ${APPLICATION_NAME}
     name: ${APPLICATION_NAME}
-    namespace: ${APPLICATION_NAME}${ENV}
+    namespace: ${NAMESPACE}
   spec:
     ports:
     - name: 8080-tcp
@@ -109,7 +109,7 @@ objects:
     labels:
       app: ${APPLICATION_NAME}
     name: ${APPLICATION_NAME}
-    namespace: ${APPLICATION_NAME}${ENV}
+    namespace: ${NAMESPACE}
   spec:
     ports:
     - name: 8080-tcp
@@ -127,7 +127,7 @@ objects:
     labels:
       template: basic-tomcat-template
     name: jenkins_edit
-    namespace: ${APPLICATION_NAME}${ENV}
+    namespace: ${NAMESPACE}
   roleRef:
     name: edit
   subjects:
