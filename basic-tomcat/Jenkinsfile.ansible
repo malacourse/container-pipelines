@@ -11,7 +11,7 @@ openshift.withCluster() {
   env.TARGET = env.BUILD_CONTEXT_DIR ? "${env.BUILD_CONTEXT_DIR}/target" : "target"
   env.APP_NAME = "basic-tomcat"
   env.BUILD = openshift.project()
-  env.DEV = "redhat-test"
+  env.DEV = "rh-demo-dev"
   env.STAGE = "${APP_NAME}-stage"
   env.PROD = "${APP_NAME}-prod"
   echo "Starting Pipeline for ${APP_NAME}..."
@@ -53,8 +53,13 @@ pipeline {
         binaryBuild(projectName: env.BUILD, buildConfigName: env.APP_NAME, artifactsDirectoryName: "oc-build")
       }
     }
+    stage('Promote Image from Build to Dev') {
+      steps {
+        tagImage(sourceImageName: env.APP_NAME, sourceImagePath: env.BUILD, toImagePath: env.DEV)
+      }
+    }
 
-    stage('Promote from Build to Dev') {
+    stage('Deploy Templates to Dev') {
       agent { label 'ansible-slave' }
       steps {
         //git url: "${APPLICATION_SOURCE_REPO}", branch: "${APPLICATION_SOURCE_REF}"
