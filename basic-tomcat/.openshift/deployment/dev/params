@@ -1,4 +1,3 @@
 APPLICATION_NAME=basic-tomcat
-ENV=-dev
 NAMESPACE=rh-demo-dev
 SA_NAMESPACE=redhat-test
