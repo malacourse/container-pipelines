@@ -1,1 +1,6 @@
-NAMESPACE=basic-tomcat-build
+NAMESPACE=redhat-cicd
+DEV_NAMESPACE=redhat-dev
+QA_NAMESPACE=redhat-qa
+APPLICATION_NAME=ticket-monster
+PIPELINE_SCRIPT=Jenkinsfile.ansible
+SOURCE_REPOSITORY_URL=https://github.com/malacourse/container-pipelines.git

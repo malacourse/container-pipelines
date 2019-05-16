@@ -9,11 +9,7 @@ retriever: modernSCM(
 openshift.withCluster() {
   env.POM_FILE = env.BUILD_CONTEXT_DIR ? "${env.BUILD_CONTEXT_DIR}/pom.xml" : "pom.xml"
   env.TARGET = env.BUILD_CONTEXT_DIR ? "${env.BUILD_CONTEXT_DIR}/target" : "target"
-  env.APP_NAME = "basic-tomcat"
   env.BUILD = openshift.project()
-  env.DEV = "rh-demo-dev"
-  env.STAGE = "${APP_NAME}-stage"
-  env.PROD = "${APP_NAME}-prod"
   echo "Starting Pipeline for ${APP_NAME}..."
 }
 

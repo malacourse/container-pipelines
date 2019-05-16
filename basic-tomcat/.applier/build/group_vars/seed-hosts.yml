@@ -1,0 +1,68 @@
+---
+
+cop_quickstarts: "https://github.com/redhat-cop/containers-quickstarts.git"
+cop_quickstarts_raw: "https://raw.githubusercontent.com/redhat-cop/containers-quickstarts/"
+cop_quickstarts_raw_version_tag: "master"
+
+cicd_params:
+  build_project:
+    NAMESPACE: redhat-cicd
+    NAMESPACE_DISPLAY_NAME: Redhat CICD Project
+  dev_project:
+    NAMESPACE: redhat-dev
+    NAMESPACE_DISPLAY_NAME: Redhat DEV Project
+  qa_project:
+    NAMESPACE: redhat-qa
+    NAMESPACE_DISPLAY_NAME: Redhat QA Project
+#
+jenkins:
+  deploy:
+    NAMESPACE: "redhat-cicd"
+    MEMORY_LIMIT: "1Gi"
+
+jenkins_ansible:
+  build:
+    NAME: "ansible-slave"
+    SOURCE_REPOSITORY_URL: "{{ cop_quickstarts }}"
+    SOURCE_REPOSITORY_REF: "{{ cop_quickstarts_raw_version_tag }}"
+    SOURCE_CONTEXT_DIR: jenkins-slaves/jenkins-slave-ansible
+    
+openshift_cluster_content:
+- object: projectrequest
+  content:
+  - name: cicd-build-project
+    template: "{{ inventory_dir }}/../../.openshift/projects/projects.yml"
+    action: create
+    params_from_vars: "{{ cicd_params.build_project }}"
+  - name: dev-project
+    template: "{{ inventory_dir }}/../../.openshift/projects/projects.yml"
+    action: create
+    params_from_vars: "{{ cicd_params.dev_project }}"
+  - name: qa-project
+    template: "{{ inventory_dir }}/../../.openshift/projects/projects.yml"
+    action: create
+    params_from_vars: "{{ cicd_params.qa_project }}"
+- object: build
+  content:
+  - name: basic-tomcat-build
+    namespace: "{{ cicd_params.build_project.NAMESPACE }}"
+    template: "{{ inventory_dir }}/../../.openshift/builds/template.yml"
+    params: "{{ inventory_dir }}/../../.openshift/builds/params"
+    tags:
+    - cicd
+  - name: ansible_slave
+    template: "{{ cop_quickstarts_raw }}/{{ cop_quickstarts_raw_version_tag }}/jenkins-slaves/.openshift/templates/jenkins-slave-generic-template.yml"
+    params_from_vars: "{{ jenkins_ansible.build }}"
+    namespace: "{{ cicd_params.build_project.NAMESPACE }}"
+    tags:
+    - jenkins
+    - ansible
+    - ci-cd-builds
+- object: deployments
+  content:
+  - name: jenkins
+    namespace: "{{ cicd_params.build_project.NAMESPACE }}"
+    template: "openshift//jenkins-ephemeral"
+    params_from_vars: "{{ jenkins.deploy }}"
+    tags:
+    - cicd

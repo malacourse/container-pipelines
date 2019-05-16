@@ -44,6 +44,12 @@ objects:
           value: "${CONTEXT_DIR}"
         - name: "ANSIBLE_INVENTORY_DIR"
           value: "${INVENTORY_DIR}"
+        - name: "APP_NAME"
+          value: "${APPLICATION_NAME}"
+        - name: "DEV_NAMESPACE"
+          value: "${DEV_NAMESPACE}"
+        - name: "QA_NAMESPACE"
+          value: "${QA_NAMESPACE}"
 - apiVersion: v1
   kind: BuildConfig
   metadata:
@@ -80,8 +86,14 @@ parameters:
   name: APPLICATION_NAME
   required: true
   value: basic-tomcat
-- description: The namespace to deploy into
+- description: The namespace to deploy build into
   name: NAMESPACE
+  required: true
+- description: The namespace to deploy for DEV
+  name: DEV_NAMESPACE
+  required: true
+- description: The namespace to deploy into for QA
+  name: QA_NAMESPACE
   required: true
 - description: Git source URI for application
   name: SOURCE_REPOSITORY_URL
@@ -102,7 +114,7 @@ parameters:
 - description: Source code repo for demo app
   name: APPLICATION_SOURCE_REPO
   required: true
-  value: https://github.com/jboss-developer/ticket-monster.git
+  value: https://github.com/mikes-org/ticket-monster.git
 - description: Source code branch/tag
   name: APPLICATION_SOURCE_REF
   required: true
