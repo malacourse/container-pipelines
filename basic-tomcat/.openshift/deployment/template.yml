@@ -119,23 +119,6 @@ objects:
     selector:
       app: ${APPLICATION_NAME}
       deploymentConfig: ${APPLICATION_NAME}
-- apiVersion: v1
-  groupNames: null
-  kind: RoleBinding
-  metadata:
-    creationTimestamp: null
-    labels:
-      template: basic-tomcat-template
-    name: jenkins_edit
-    namespace: ${NAMESPACE}
-  roleRef:
-    name: edit
-  subjects:
-  - kind: ServiceAccount
-    name: ${SA_NAME}
-    namespace: ${SA_NAMESPACE}
-  userNames:
-  - system:serviceaccount:${SA_NAMESPACE}:${SA_NAME}
 parameters:
 - description: The name for the application.
   name: APPLICATION_NAME

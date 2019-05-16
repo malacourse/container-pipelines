@@ -95,6 +95,10 @@ parameters:
 - description: The namespace to deploy into for QA
   name: QA_NAMESPACE
   required: true
+- description: Name of a service account that can deploy to this project
+  name: SA_NAME
+  required: true
+  value: jenkins
 - description: Git source URI for application
   name: SOURCE_REPOSITORY_URL
   required: true
@@ -107,7 +111,7 @@ parameters:
   value: "basic-tomcat"
 - description: path to inventory dir
   name: INVENTORY_DIR
-  value: "basic-tomcat/.applier"
+  value: "basic-tomcat/.applier/deploy"
 - description: Path within Git project pointing to the pipeline run script
   name: PIPELINE_SCRIPT
   value: Jenkinsfile

@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: generic-java-jenkins-pipeline
+metadata:
+  annotations:
+    description: Application template for JWS applications built using a Jenkins Pipeline
+    iconClass: icon-tomcat
+    tags: tomcat,tomcat8,java,jboss,xpaas,jenkins-ci
+    version: 1.2.0
+  name: generic-java-jenkins-pipeline
+objects:
+- apiVersion: v1
+  groupNames: null
+  kind: RoleBinding
+  metadata:
+    creationTimestamp: null
+    labels:
+      template: basic-tomcat-template
+    name: jenkins_edit
+    namespace: ${DEV_NAMESPACE}
+  roleRef:
+    name: edit
+  subjects:
+  - kind: ServiceAccount
+    name: ${SA_NAME}
+    namespace: ${NAMESPACE}
+  userNames:
+  - system:serviceaccount:${NAMESPACE}:${SA_NAME}
+parameters:
+- description: The namespace to deploy build into
+  name: NAMESPACE
+  required: true
+- description: The namespace to deploy for DEV
+  name: DEV_NAMESPACE
+  required: true
+- description: Name of a service account that can deploy to this project
+  name: SA_NAME
+  required: true
+  value: jenkins

@@ -1,3 +1,3 @@
-APPLICATION_NAME=basic-tomcat
-NAMESPACE=rh-demo-dev
-SA_NAMESPACE=redhat-test
+APPLICATION_NAME=ticket-monster
+NAMESPACE=redhat-dev
+SA_NAMESPACE=redhat-cicd

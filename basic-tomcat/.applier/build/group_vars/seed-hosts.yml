@@ -8,6 +8,7 @@ cicd_params:
   build_project:
     NAMESPACE: redhat-cicd
     NAMESPACE_DISPLAY_NAME: Redhat CICD Project
+    DEV_NAMESPACE: redhat-dev
   dev_project:
     NAMESPACE: redhat-dev
     NAMESPACE_DISPLAY_NAME: Redhat DEV Project
@@ -26,6 +27,7 @@ jenkins_ansible:
     SOURCE_REPOSITORY_URL: "{{ cop_quickstarts }}"
     SOURCE_REPOSITORY_REF: "{{ cop_quickstarts_raw_version_tag }}"
     SOURCE_CONTEXT_DIR: jenkins-slaves/jenkins-slave-ansible
+    SLAVE_IMAGE_TAG: "latest"
     
 openshift_cluster_content:
 - object: projectrequest
@@ -48,6 +50,12 @@ openshift_cluster_content:
     namespace: "{{ cicd_params.build_project.NAMESPACE }}"
     template: "{{ inventory_dir }}/../../.openshift/builds/template.yml"
     params: "{{ inventory_dir }}/../../.openshift/builds/params"
+    tags:
+    - cicd
+  - name: cicd-permissions
+    namespace: "{{ cicd_params.dev_project.NAMESPACE }}"
+    template: "{{ inventory_dir }}/../../.openshift/builds/role-template.yml"
+    params_from_vars: "{{ cicd_params.build_project }}"
     tags:
     - cicd
   - name: ansible_slave
