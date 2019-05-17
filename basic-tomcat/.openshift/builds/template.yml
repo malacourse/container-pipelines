@@ -111,7 +111,7 @@ parameters:
   value: "basic-tomcat"
 - description: path to inventory dir
   name: INVENTORY_DIR
-  value: "basic-tomcat/.applier/deploy"
+  value: "basic-tomcat/.applier/"
 - description: Path within Git project pointing to the pipeline run script
   name: PIPELINE_SCRIPT
   value: Jenkinsfile

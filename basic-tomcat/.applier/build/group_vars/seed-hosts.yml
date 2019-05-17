@@ -9,12 +9,6 @@ cicd_params:
     NAMESPACE: redhat-cicd
     NAMESPACE_DISPLAY_NAME: Redhat CICD Project
     DEV_NAMESPACE: redhat-dev
-  dev_project:
-    NAMESPACE: redhat-dev
-    NAMESPACE_DISPLAY_NAME: Redhat DEV Project
-  qa_project:
-    NAMESPACE: redhat-qa
-    NAMESPACE_DISPLAY_NAME: Redhat QA Project
 #
 jenkins:
   deploy:
@@ -36,26 +30,12 @@ openshift_cluster_content:
     template: "{{ inventory_dir }}/../../.openshift/projects/projects.yml"
     action: create
     params_from_vars: "{{ cicd_params.build_project }}"
-  - name: dev-project
-    template: "{{ inventory_dir }}/../../.openshift/projects/projects.yml"
-    action: create
-    params_from_vars: "{{ cicd_params.dev_project }}"
-  - name: qa-project
-    template: "{{ inventory_dir }}/../../.openshift/projects/projects.yml"
-    action: create
-    params_from_vars: "{{ cicd_params.qa_project }}"
 - object: build
   content:
   - name: basic-tomcat-build
     namespace: "{{ cicd_params.build_project.NAMESPACE }}"
     template: "{{ inventory_dir }}/../../.openshift/builds/template.yml"
     params: "{{ inventory_dir }}/../../.openshift/builds/params"
-    tags:
-    - cicd
-  - name: cicd-permissions
-    namespace: "{{ cicd_params.dev_project.NAMESPACE }}"
-    template: "{{ inventory_dir }}/../../.openshift/builds/role-template.yml"
-    params_from_vars: "{{ cicd_params.build_project }}"
     tags:
     - cicd
   - name: ansible_slave

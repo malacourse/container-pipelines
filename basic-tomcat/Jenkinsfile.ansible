@@ -49,6 +49,17 @@ pipeline {
         binaryBuild(projectName: env.BUILD, buildConfigName: env.APP_NAME, artifactsDirectoryName: "oc-build")
       }
     }
+
+    stage('Initialize Deployment') {
+      agent { label 'ansible-slave' }
+      steps {
+        sh """
+          ansible-galaxy install -r ./${env.ANSIBLE_CONTEXT_DIR}/requirements.yml -p .
+          ansible-playbook -i ./${env.ANSIBLE_INVENTORY_DIR}/pre-deploy ./openshift-applier/playbooks/openshift-cluster-seed.yml -e filter_tags='pre-deploy'
+        """
+      }
+    }
+
     stage('Promote Image from Build to Dev') {
       steps {
         tagImage(sourceImageName: env.APP_NAME, sourceImagePath: env.BUILD, toImagePath: env.DEV_NAMESPACE)
@@ -60,9 +71,8 @@ pipeline {
       steps {
         //git url: "${APPLICATION_SOURCE_REPO}", branch: "${APPLICATION_SOURCE_REF}"
         sh """
-          ls -lrt ${env.ANSIBLE_CONTEXT_DIR}
           ansible-galaxy install -r ./${env.ANSIBLE_CONTEXT_DIR}/requirements.yml -p .
-          ansible-playbook -i ./${env.ANSIBLE_INVENTORY_DIR} ./openshift-applier/playbooks/openshift-cluster-seed.yml -e NAMESPACE='${env.DEV_NAMESPACE}' 
+          ansible-playbook -i ./${env.ANSIBLE_INVENTORY_DIR}/deploy ./openshift-applier/playbooks/openshift-cluster-seed.yml -e filter_tags='deploy'
         """
       }
     }

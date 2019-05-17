@@ -1,0 +1,35 @@
+---
+deploy_setup:
+  build_project:
+    NAMESPACE: redhat-cicd
+    DEV_NAMESPACE: redhat-dev
+  dev_project:
+    NAMESPACE: redhat-dev
+    NAMESPACE_DISPLAY_NAME: Redhat DEV Project
+  qa_project:
+    NAMESPACE: redhat-qa
+    NAMESPACE_DISPLAY_NAME: Redhat QA Project
+
+openshift_cluster_content:
+- object: projectrequest
+  content:
+  - name: dev-project
+    template: "{{ inventory_dir }}/../../.openshift/projects/projects.yml"
+    action: create
+    params_from_vars: "{{ deploy_setup.dev_project }}"
+    tags:
+    - pre-deploy
+  - name: qa-project
+    template: "{{ inventory_dir }}/../../.openshift/projects/projects.yml"
+    action: create
+    params_from_vars: "{{ deploy_setup.qa_project }}"
+    tags:
+    - pre-deploy
+- object: deployments
+  content:
+  - name: initialize-deployment
+    namespace: "{{ deploy_setup.dev_project.NAMESPACE }}"
+    template: "{{ inventory_dir }}/../../.openshift/deployment/init-template.yml"
+    params_from_vars: "{{ deploy_setup.build_project }}"
+    tags:
+    - pre-deploy

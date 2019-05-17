@@ -1,24 +1,27 @@
 ---
-    
+deploy_setup:
+  build_project:
+    NAMESPACE: redhat-cicd
+    DEV_NAMESPACE: redhat-dev
+  dev_project:
+    NAMESPACE: redhat-dev
+    NAMESPACE_DISPLAY_NAME: Redhat DEV Project
+  qa_project:
+    NAMESPACE: redhat-qa
+    NAMESPACE_DISPLAY_NAME: Redhat QA Project
+
 openshift_cluster_content:
-- object: projectrequest
-  content:
-  - name: basic-tomcat-spaces
-    file: "{{ inventory_dir }}/../.openshift/projects/projects.yml"
-    action: create
-    tags:
-    - deploy
 - object: deployments
   content:
-  - name: basic-tomcat-dev
-    namespace: "{{ NAMESPACE }}"
+  - name: deploy-to-dev
+    namespace: "{{ deploy_setup.dev_project.NAMESPACE }}"
     template: "{{ inventory_dir }}/../.openshift/deployment/template.yml"
     params: "{{ inventory_dir }}/../.openshift/deployment/dev/params"
     tags:
     - deploy
-  - name: app-config
-    namespace: "{{ NAMESPACE }}"
-    template: ".openshift/deployment/config_maps.yml"
-    params: ".openshift/deployment/dev/params"
-    tags:
-    - deploy
+##  - name: app-config
+##    namespace: "{{ NAMESPACE }}"
+##    template: ".openshift/deployment/config_maps.yml"
+##    params: ".openshift/deployment/dev/params"
+##    tags:
+##    - deploy
