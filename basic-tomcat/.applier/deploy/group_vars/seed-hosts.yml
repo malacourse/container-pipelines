@@ -15,8 +15,8 @@ openshift_cluster_content:
   content:
   - name: deploy-to-dev
     namespace: "{{ deploy_setup.dev_project.NAMESPACE }}"
-    template: "{{ inventory_dir }}/../.openshift/deployment/template.yml"
-    params: "{{ inventory_dir }}/../.openshift/deployment/dev/params"
+    template: "{{ inventory_dir }}/../../.openshift/deployment/template.yml"
+    params: "{{ inventory_dir }}/../../.openshift/deployment/dev/params"
     tags:
     - deploy
 ##  - name: app-config

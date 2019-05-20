@@ -32,6 +32,11 @@ openshift_cluster_content:
     params_from_vars: "{{ cicd_params.build_project }}"
 - object: build
   content:
+  - name: minishift-reg-access
+    namespace: "{{ cicd_params.build_project.NAMESPACE }}"
+    file: "{{ inventory_dir }}/../../.openshift/builds/rh-registry-token.yml"
+    tags:
+    - cicd
   - name: basic-tomcat-build
     namespace: "{{ cicd_params.build_project.NAMESPACE }}"
     template: "{{ inventory_dir }}/../../.openshift/builds/template.yml"
