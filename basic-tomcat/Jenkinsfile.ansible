@@ -33,10 +33,7 @@ pipeline {
           echo '${env.BUILD_CONTEXT_DIR}.openshift/configmaps'
           ls ${env.BUILD_CONTEXT_DIR}.openshift/configmaps
           cat ${env.BUILD_CONTEXT_DIR}.openshift/configmaps/configList.txt
-          cat ${env.BUILD_CONTEXT_DIR}.openshift/configmaps/configList.txt | while read line
-          do
-             echo 'Line is: $line'
-          done
+          for word in $(cat ${env.BUILD_CONTEXT_DIR}.openshift/configmaps); do echo $word; done
         """
         }
     }
