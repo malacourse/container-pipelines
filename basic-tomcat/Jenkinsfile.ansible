@@ -60,7 +60,7 @@ pipeline {
       }
     }
 
-    stage('Initialize Deployment') {
+    stage('Process Config Maps') {
       agent { label 'ansible-slave' }
       steps {
         sh """
