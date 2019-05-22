@@ -29,11 +29,12 @@ pipeline {
       agent { label 'ansible-slave' }
       steps {
         sh """
+          filename = "${env.BUILD_CONTEXT_DIR}.openshift/configmaps"
           echo 'Hello World'
           echo '${env.BUILD_CONTEXT_DIR}.openshift/configmaps'
           ls ${env.BUILD_CONTEXT_DIR}.openshift/configmaps
           cat ${env.BUILD_CONTEXT_DIR}.openshift/configmaps/configList.txt
-          for word in $(cat ${env.BUILD_CONTEXT_DIR}.openshift/configmaps); do echo $word; done
+          for word in $(cat $filename); do echo $word; done
         """
         }
     }
