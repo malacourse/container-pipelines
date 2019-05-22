@@ -29,8 +29,9 @@ pipeline {
       agent { label 'ansible-slave' }
       steps {
           sh '''         
-            URL='hello world'
+            URL='${env.BUILD_CONTEXT_DIR}/.openshift/configmaps/configList.txt'
             echo $URL
+            cat $URL
             echo 'Done'
            '''
         }
