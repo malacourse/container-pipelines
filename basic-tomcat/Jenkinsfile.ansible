@@ -64,7 +64,12 @@ pipeline {
       agent { label 'ansible-slave' }
       steps {
         sh """
-          cat .openshift/configmaps/configList.txt
+          cat ${env.BUILD_CONTEXT_DIR}.openshift/configmaps/configList.txt
+          cat ${env.BUILD_CONTEXT_DIR}.openshift/configmaps/configList.txt | while read line
+          do
+             echo "Line is: $line"
+          done
+
         """
       }
     }
