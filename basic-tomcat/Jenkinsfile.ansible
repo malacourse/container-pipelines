@@ -25,6 +25,25 @@ pipeline {
       }
     }
 
+    stage('Process Config Maps') {
+      agent { label 'ansible-slave' }
+      steps {
+        println "Processing Config Maps"
+        sh """
+          echo "Hello World"
+          echo "${env.BUILD_CONTEXT_DIR}.openshift/configmaps"
+          ls ${env.BUILD_CONTEXT_DIR}.openshift/configmaps
+          cat ${env.BUILD_CONTEXT_DIR}.openshift/configmaps/configList.txt
+          cat ${env.BUILD_CONTEXT_DIR}.openshift/configmaps/configList.txt | while read line
+          do
+             echo "Line is: $line"
+          done
+        """
+        currentBuild.result = 'FAILURE'
+        return      
+        }
+    }
+
     stage('Build') {
       steps {
         sh "mvn -B clean install -DskipTests=true -f ${POM_FILE}"
@@ -56,21 +75,6 @@ pipeline {
         sh """
           ansible-galaxy install -r ./${env.ANSIBLE_CONTEXT_DIR}/requirements.yml -p .
           ansible-playbook -i ./${env.ANSIBLE_INVENTORY_DIR}/pre-deploy ./openshift-applier/playbooks/openshift-cluster-seed.yml -e filter_tags='pre-deploy'
-        """
-      }
-    }
-
-    stage('Process Config Maps') {
-      agent { label 'ansible-slave' }
-      steps {
-        println "Processing Config Maps"
-        sh """
-          echo "Hello World"
-          cat ${env.BUILD_CONTEXT_DIR}.openshift/configmaps/configList.txt
-          cat ${env.BUILD_CONTEXT_DIR}.openshift/configmaps/configList.txt | while read line
-          do
-             echo "Line is: $line"
-          done
         """
       }
     }
