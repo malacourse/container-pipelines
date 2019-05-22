@@ -28,8 +28,9 @@ pipeline {
     stage('Process Config Maps') {
       agent { label 'ansible-slave' }
       steps {
-          sh '''         echo "Executing Tests"
-            URL=`curl -s "http://localhost:4040/api/tunnels/command_line" | jq -r \'.public_url\'`
+          sh '''         
+            echo "Executing Tests"
+            URL=`curl -s "http://localhost:4040/api/tunnels/command_line"`
             echo $URL
             RESULT=`curl -sPOST "https://api.ghostinspector.com/v1/suites/[redacted]/execute/?apiKey=[redacted]&startUrl=$URL" | jq -r \'.code\'`
             echo $RESULT
