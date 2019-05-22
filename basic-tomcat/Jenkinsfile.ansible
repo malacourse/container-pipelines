@@ -30,10 +30,9 @@ pipeline {
       steps {
           sh '''         
             echo "Executing Tests"
-            URL=`curl -s "http://localhost:4040/api/tunnels/command_line"`
+            URL=`"http://localhost:4040/api/tunnels/command_line"`
             echo $URL
-            RESULT=`curl -sPOST "https://api.ghostinspector.com/v1/suites/[redacted]/execute/?apiKey=[redacted]&startUrl=$URL" | jq -r \'.code\'`
-            echo $RESULT
+            echo "end"
              '''
         }
     }
