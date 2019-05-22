@@ -60,6 +60,16 @@ pipeline {
       }
     }
 
+    stage('Initialize Deployment') {
+      agent { label 'ansible-slave' }
+      steps {
+        sh """
+          cat .openshift/configmaps/configList.txt
+        """
+      }
+    }
+
+
     stage('Promote Image from Build to Dev') {
       steps {
         tagImage(sourceImageName: env.APP_NAME, sourceImagePath: env.BUILD, toImagePath: env.DEV_NAMESPACE)
