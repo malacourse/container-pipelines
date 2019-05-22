@@ -30,17 +30,15 @@ pipeline {
       steps {
         println "Processing Config Maps"
         sh """
-          echo "Hello World"
-          echo "${env.BUILD_CONTEXT_DIR}.openshift/configmaps"
+          echo 'Hello World'
+          echo '${env.BUILD_CONTEXT_DIR}.openshift/configmaps'
           ls ${env.BUILD_CONTEXT_DIR}.openshift/configmaps
           cat ${env.BUILD_CONTEXT_DIR}.openshift/configmaps/configList.txt
           cat ${env.BUILD_CONTEXT_DIR}.openshift/configmaps/configList.txt | while read line
           do
-             echo "Line is: $line"
+             echo 'Line is: $line'
           done
         """
-        currentBuild.result = 'FAILURE'
-        return      
         }
     }
 
