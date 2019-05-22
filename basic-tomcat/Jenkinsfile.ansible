@@ -29,11 +29,10 @@ pipeline {
       agent { label 'ansible-slave' }
       steps {
           sh '''         
-            echo "Executing Tests"
-            URL=`"http://localhost:4040/api/tunnels/command_line"`
+            URL='hello world'
             echo $URL
-            echo "end"
-             '''
+            echo 'Done'
+           '''
         }
     }
 
