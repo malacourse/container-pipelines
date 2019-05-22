@@ -28,7 +28,6 @@ pipeline {
     stage('Process Config Maps') {
       agent { label 'ansible-slave' }
       steps {
-        println "Processing Config Maps"
         sh """
           echo 'Hello World'
           echo '${env.BUILD_CONTEXT_DIR}.openshift/configmaps'
