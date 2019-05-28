@@ -68,8 +68,8 @@ pipeline {
                  echo $NM
                  FP="$(cut -d' ' -f3 <<<"$line")"
                  echo $FP
-                 mkdir -p "${BUILD_CONTEXT_DIR}.openshift/files"
-                 oc create cm $NM --from-file="${BUILD_CONTEXT_DIR}$FP" --dry-run=true -o yaml > "${BUILD_CONTEXT_DIR}.openshift/files/$NM.yml"
+                 mkdir -p "${BUILD_CONTEXT_DIR}/.openshift/files"
+                 oc create cm $NM --from-file="${BUILD_CONTEXT_DIR}/$FP" --dry-run=true -o yaml > "${BUILD_CONTEXT_DIR}/.openshift/files/$NM.yml"
                fi
             done < "$URL"            
             oc apply -f "${BUILD_CONTEXT_DIR}.openshift/files" -n "${DEV_NAMESPACE}"
