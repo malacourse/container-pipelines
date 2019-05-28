@@ -29,9 +29,21 @@ pipeline {
       agent { label 'ansible-slave' }
       steps {
           sh '''         
-            URL='${env.BUILD_CONTEXT_DIR}/.openshift/configmaps/configList.txt'
+            URL="${BUILD_CONTEXT_DIR}/.openshift/configmaps/configList.txt"
             echo $URL
             cat $URL
+            while IFS= read -r line; do
+               echo "Text read from file: $line"
+               T="$(cut -d' ' -f1 <<<"$line")"
+               if [ $T = "env" ]; then
+                 echo "Env Config Map"
+                 NM="$(cut -d' ' -f2 <<<"$line")"
+                 echo $NM
+                 FP="$(cut -d' ' -f3 <<<"$line")"
+                 echo $FP
+                 oc create cm $NM --from-env-file=$FP --dry-run=true -o yaml > .openshift/configmaps/$NM.yml
+               fi
+            done < "$URL"            
             echo 'Done'
            '''
         }
