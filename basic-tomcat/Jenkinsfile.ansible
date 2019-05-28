@@ -28,6 +28,7 @@ pipeline {
     stage('Process Config Maps') {
       agent { label 'ansible-slave' }
       steps {
+          git url: "${APPLICATION_SOURCE_REPO}", branch: "${APPLICATION_SOURCE_REF}"
           sh '''         
             URL="${BUILD_CONTEXT_DIR}/.openshift/configmaps/configList.txt"
             echo $URL
