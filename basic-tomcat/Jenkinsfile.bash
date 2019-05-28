@@ -53,10 +53,27 @@ pipeline {
     stage('Initialize Deployment') {
       agent { label 'ansible-slave' }
       steps {
-        sh """
-          ansible-galaxy install -r ./${env.ANSIBLE_CONTEXT_DIR}/requirements.yml -p .
-          ansible-playbook -i ./${env.ANSIBLE_INVENTORY_DIR}/pre-deploy ./openshift-applier/playbooks/openshift-cluster-seed.yml 
-        """
+          git url: "${APPLICATION_SOURCE_REPO}", branch: "${APPLICATION_SOURCE_REF}"
+          sh '''         
+            URL="${BUILD_CONTEXT_DIR}/.openshift/configmaps/configList.txt"
+            echo $URL
+            cat $URL
+            while IFS= read -r line; do
+               echo "Text read from file: $line"
+               T="$(cut -d' ' -f1 <<<"$line")"
+               if [ $T = "env" ]; then
+                 echo "Env Config Map"
+                 NM="$(cut -d' ' -f2 <<<"$line")"
+                 echo $NM
+                 FP="$(cut -d' ' -f3 <<<"$line")"
+                 echo $FP
+                 mkdir -p "${BUILD_CONTEXT_DIR}.openshift/files"
+                 oc create cm $NM --from-env-file=$FP --dry-run=true -o yaml > "${BUILD_CONTEXT_DIR}.openshift/files/$NM.yml"
+               fi
+            done < "$URL"            
+            oc apply -f "${BUILD_CONTEXT_DIR}.openshift/files" -n "${DEV_NAMESPACE}"
+            echo 'Done'
+           '''
       }
     }
 
