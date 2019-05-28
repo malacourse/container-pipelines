@@ -58,6 +58,7 @@ pipeline {
             URL="${BUILD_CONTEXT_DIR}/.openshift/configmaps/configList.txt"
             echo $URL
             cat $URL
+            oc version
             while IFS= read -r line; do
                echo "Text read from file: $line"
                T="$(cut -d' ' -f1 <<<"$line")"
@@ -68,7 +69,7 @@ pipeline {
                  FP="$(cut -d' ' -f3 <<<"$line")"
                  echo $FP
                  mkdir -p "${BUILD_CONTEXT_DIR}.openshift/files"
-                 oc create cm $NM --from-env-file=$FP --dry-run=true -o yaml > "${BUILD_CONTEXT_DIR}.openshift/files/$NM.yml"
+                 oc create cm $NM --from-file=$FP --dry-run=true -o yaml > "${BUILD_CONTEXT_DIR}.openshift/files/$NM.yml"
                fi
             done < "$URL"            
             oc apply -f "${BUILD_CONTEXT_DIR}.openshift/files" -n "${DEV_NAMESPACE}"
