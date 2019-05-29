@@ -11,9 +11,22 @@ deploy_setup:
     NAMESPACE_DISPLAY_NAME: Redhat QA Project
 
 openshift_cluster_content:
-- object: deployments
+- galaxy_requirements: "{{ inventory_dir }}/../../.openshift/requirements.yml" 
+- object: deployments 
+  configmaps:
+  - name: config-env
+    namespace: "{{ deploy_setup.dev_project.NAMESPACE }}"
+    properties_file: "{{ inventory_dir }}/../../demo/src/main/resources/appdisplay.properties"
+    destination: "{{ inventory_dir }}/../../demo/.openshift/files"
   content:
-  - name: deploy-to-dev
+  - name: create-config-maps
+    pre_steps:
+    - role: "custom-roles/roles/generate-configmaps"
+    namespace: "{{ deploy_setup.dev_project.NAMESPACE }}"
+    file: "{{ inventory_dir }}/../../demo/.openshift/files"
+    tags:
+    - deploy
+  - name: deploy-template
     namespace: "{{ deploy_setup.dev_project.NAMESPACE }}"
     template: "{{ inventory_dir }}/../../.openshift/deployment/template.yml"
     params: "{{ inventory_dir }}/../../.openshift/deployment/dev/params"

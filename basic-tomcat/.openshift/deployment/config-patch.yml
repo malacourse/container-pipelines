@@ -1,0 +1,3 @@
+ envFrom:
+  - configMapRef:
+    name: config-env

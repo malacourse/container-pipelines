@@ -1,0 +1,7 @@
+# This is the Ansible Galaxy requirements file to pull in the correct roles
+# to support the operation of CASL provisioning/runs.
+
+# From 'openshift-applier'
+- name: custom-roles
+  scm: git
+  src: https://github.com/mikes-org/openshift-roles.git
