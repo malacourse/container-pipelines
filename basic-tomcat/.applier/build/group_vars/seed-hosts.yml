@@ -22,6 +22,7 @@ jenkins_ansible:
     SOURCE_REPOSITORY_REF: "{{ cop_quickstarts_raw_version_tag }}"
     SOURCE_CONTEXT_DIR: jenkins-slaves/jenkins-slave-ansible
     SLAVE_IMAGE_TAG: "latest"
+    BUILDER_IMAGE_NAME: "registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7:v3.11"
     
 openshift_cluster_content:
 - object: projectrequest

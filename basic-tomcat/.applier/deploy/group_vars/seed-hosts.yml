@@ -18,6 +18,7 @@ openshift_cluster_content:
     namespace: "{{ deploy_setup.dev_project.NAMESPACE }}"
     properties_file: "{{ WORK_DIR }}/demo/src/main/resources/appdisplay.properties"
     destination: "{{ WORK_DIR }}/demo/.openshift/files"
+    maptoenv: true
   content:
   - name: create-config-maps
     pre_steps:
