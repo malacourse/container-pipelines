@@ -11,6 +11,7 @@ openshift.withCluster() {
   env.TARGET = env.BUILD_CONTEXT_DIR ? "${env.BUILD_CONTEXT_DIR}/target" : "target"
   env.BUILD = openshift.project()
   echo "Starting Pipeline for ${APP_NAME}..."
+  env.WORK_DIR = pwd()
 }
 
 pipeline {
@@ -70,7 +71,6 @@ pipeline {
     stage('Deploy Templates to Dev') {
       agent { label 'ansible-slave' }
       steps {
-        def WORK_DIR = pwd();
         dir('app-source') {
           git url: "${APPLICATION_SOURCE_REPO}", branch: "${APPLICATION_SOURCE_REF}"
         }
