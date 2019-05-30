@@ -11,7 +11,6 @@ openshift.withCluster() {
   env.TARGET = env.BUILD_CONTEXT_DIR ? "${env.BUILD_CONTEXT_DIR}/target" : "target"
   env.BUILD = openshift.project()
   echo "Starting Pipeline for ${APP_NAME}..."
-  env.WORK_DIR = pwd()
 }
 
 pipeline {
@@ -70,14 +69,17 @@ pipeline {
 
     stage('Deploy Templates to Dev') {
       agent { label 'ansible-slave' }
+      environment  {
+         WORK_DIR = pwd()
+      }
       steps {
         dir('app-source') {
           git url: "${APPLICATION_SOURCE_REPO}", branch: "${APPLICATION_SOURCE_REF}"
         }
         sh """
           pwd
-          ls ${WORK_DIR}
           ls ${WORKSPACE}
+          ls ${WORK_DIR}
           ls -lrt
           ansible-galaxy install -r ./${env.ANSIBLE_CONTEXT_DIR}/requirements.yml -p .
           ansible-playbook -i ./${env.ANSIBLE_INVENTORY_DIR}/deploy ./openshift-applier/playbooks/openshift-cluster-seed.yml -e filter_tags='deploy'
