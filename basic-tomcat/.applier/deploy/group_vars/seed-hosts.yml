@@ -16,14 +16,14 @@ openshift_cluster_content:
   configmaps:
   - name: config-env
     namespace: "{{ deploy_setup.dev_project.NAMESPACE }}"
-    properties_file: "$(WORK_DIR)/app-source/demo/src/main/resources/appdisplay.properties"
-    destination: "$(WORK_DIR)/app-source/demo/.openshift/files"
+    properties_file: "$(WORK_DIR)/demo/src/main/resources/appdisplay.properties"
+    destination: "$(WORK_DIR)/demo/.openshift/files"
   content:
   - name: create-config-maps
     pre_steps:
     - role: "custom-roles/roles/generate-configmaps"
     namespace: "{{ deploy_setup.dev_project.NAMESPACE }}"
-    file: "$(WORK_DIR)/app-source/demo/.openshift/files"
+    file: "$(WORK_DIR)/demo/.openshift/files"
     tags:
     - deploy
   - name: deploy-template
