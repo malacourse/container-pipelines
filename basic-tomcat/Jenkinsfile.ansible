@@ -70,12 +70,9 @@ pipeline {
     stage('Deploy Templates to Dev') {
       agent { label 'ansible-slave' }
       steps {
-        sh """
-          pwd
-          ls -lrt
-          mkdir app && cd app
-        """
-        git url: "${APPLICATION_SOURCE_REPO}", branch: "${APPLICATION_SOURCE_REF}"
+        dir('app-source') {
+          git url: "${APPLICATION_SOURCE_REPO}", branch: "${APPLICATION_SOURCE_REF}"
+        }
         sh """
           pwd
           ls -lrt
