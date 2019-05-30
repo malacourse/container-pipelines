@@ -73,6 +73,7 @@ pipeline {
         sh """
           pwd
           ls -lrt
+          mkdir app && cd app
         """
         git url: "${APPLICATION_SOURCE_REPO}", branch: "${APPLICATION_SOURCE_REF}"
         sh """
