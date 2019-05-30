@@ -79,10 +79,9 @@ pipeline {
         sh """
           pwd
           ls ${WORKSPACE}
-          ls ${WORK_DIR}
           ls -lrt
           ansible-galaxy install -r ./${env.ANSIBLE_CONTEXT_DIR}/requirements.yml -p .
-          ansible-playbook -i ./${env.ANSIBLE_INVENTORY_DIR}/deploy ./openshift-applier/playbooks/openshift-cluster-seed.yml -e filter_tags='deploy'
+          ansible-playbook -i ./${env.ANSIBLE_INVENTORY_DIR}/deploy ./openshift-applier/playbooks/openshift-cluster-seed.yml -e WORK_DIR=${WORKSPACE}'
         """
       }
     }
