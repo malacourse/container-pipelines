@@ -33,16 +33,19 @@ objects:
             value: ${JWS_ADMIN_USERNAME}
           - name: JWS_ADMIN_PASSWORD
             value: ${JWS_ADMIN_PASSWORD}
-            
+{% if openshift_cluster_content is defined %}
+{% for object in openshift_cluster_content %}
+{% if object.configmaps is defined %}
+{% for cm in object.configmaps %}
+{% if cm.maptoenv is defined %}
           envFrom:
             - configMapRef:
-              name: config-env
-            
-            
-            
-            
-            
-            
+              name: {{ cm.name }}
+{% endif %}            
+{% endfor %}            
+{% endif %}            
+{% endfor %}            
+{% endif %}            
           image: ${APPLICATION_NAME}
           imagePullPolicy: Always
           name: ${APPLICATION_NAME}

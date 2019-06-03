@@ -12,13 +12,14 @@ deploy_setup:
 
 openshift_cluster_content:
 - galaxy_requirements: "{{ inventory_dir }}/../../.openshift/requirements.yml" 
-- object: deployments 
+- object: configmaps
   configmaps:
   - name: config-env
     namespace: "{{ deploy_setup.dev_project.NAMESPACE }}"
     properties_file: "{{ WORK_DIR }}/demo/src/main/resources/appdisplay.properties"
     destination: "{{ WORK_DIR }}/demo/.openshift/files"
     maptoenv: true
+- object: deployments 
   content:
   - name: create-config-maps
     pre_steps:
@@ -28,6 +29,11 @@ openshift_cluster_content:
     tags:
     - deploy
   - name: deploy-template
+    pre_steps:
+    - role: "custom-roles/roles/dynamic-templates"
+      vars:
+         src: "{{ inventory_dir }}/../../.openshift/deployment/template.yml.j2"
+         destination: "{{ inventory_dir }}/../../.openshift/deployment/template.yml"
     namespace: "{{ deploy_setup.dev_project.NAMESPACE }}"
     template: "{{ inventory_dir }}/../../.openshift/deployment/template.yml"
     params: "{{ inventory_dir }}/../../.openshift/deployment/dev/params"
