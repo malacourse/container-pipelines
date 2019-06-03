@@ -33,13 +33,9 @@ objects:
             value: ${JWS_ADMIN_USERNAME}
           - name: JWS_ADMIN_PASSWORD
             value: ${JWS_ADMIN_PASSWORD}
-            
           envFrom:
             - configMapRef:
               name: config-env
-            
-            
-            
             
             
             

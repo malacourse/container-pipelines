@@ -10,20 +10,30 @@ deploy_setup:
     NAMESPACE: redhat-qa
     NAMESPACE_DISPLAY_NAME: Redhat QA Project
 
+configmaps_from_files:
+- name: config-env
+  namespace: "{{ deploy_setup.dev_project.NAMESPACE }}"
+  properties_file: "{{ WORK_DIR }}/demo/src/main/resources/appdisplay.properties"
+  destination: "{{ WORK_DIR }}/demo/.openshift/files"
+  maptoenv: true
+
+
 openshift_cluster_content:
 - galaxy_requirements: "{{ inventory_dir }}/../../.openshift/requirements.yml" 
-- object: configmaps
-  configmaps:
-  - name: config-env
-    namespace: "{{ deploy_setup.dev_project.NAMESPACE }}"
-    properties_file: "{{ WORK_DIR }}/demo/src/main/resources/appdisplay.properties"
-    destination: "{{ WORK_DIR }}/demo/.openshift/files"
-    maptoenv: true
+#- object: configmaps
+#  configmaps:
+#  - name: config-env
+#    namespace: "{{ deploy_setup.dev_project.NAMESPACE }}"
+#    properties_file: "{{ WORK_DIR }}/demo/src/main/resources/appdisplay.properties"
+##    destination: "{{ WORK_DIR }}/demo/.openshift/files"
+#    maptoenv: true
 - object: deployments 
   content:
   - name: create-config-maps
     pre_steps:
     - role: "custom-roles/roles/generate-configmaps"
+      vars:
+        configMaps: "{{ configmaps_from_files }}"
     namespace: "{{ deploy_setup.dev_project.NAMESPACE }}"
     file: "{{ WORK_DIR }}/demo/.openshift/files"
     tags:
