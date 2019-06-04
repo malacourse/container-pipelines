@@ -27,13 +27,15 @@ configmaps_from_files:
   destination: "{{ WORK_DIR }}/demo/.openshift/files"
   mountpath: "/var/lib/config"
 
+tmp_dep_dir: "{{ EXAMPLE_ROLES_DIR }}"
+
 openshift_cluster_content:
-- galaxy_requirements: "{{ inventory_dir }}/../../.openshift/requirements.yml" 
+#- galaxy_requirements: "{{ inventory_dir }}/../../.openshift/requirements.yml" 
 - object: deployments 
   content:
   - name: create-config-maps
     pre_steps:
-    - role: "custom-roles/roles/generate-configmaps"
+    - role: "./openshift-roles/roles/generate-configmaps"
       vars:
         configMaps: "{{ configmaps_from_files }}"
     namespace: "{{ deploy_setup.dev_project.NAMESPACE }}"
@@ -45,7 +47,7 @@ openshift_cluster_content:
     template: "{{ inventory_dir }}/../../.openshift/deployment/template.yml"
     params: "{{ inventory_dir }}/../../.openshift/deployment/dev/params"
     pre_steps:
-    - role: "custom-roles/roles/dynamic-templates"
+    - role: "./openshift-roles/roles/dynamic-templates"
       vars:
          src: "{{ inventory_dir }}/../../.openshift/deployment/template.yml.j2"
          destination: "{{ inventory_dir }}/../../.openshift/deployment/template.yml"

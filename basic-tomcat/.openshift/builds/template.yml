@@ -38,6 +38,10 @@ objects:
           value: "${APPLICATION_SOURCE_REPO}"
         - name: "APPLICATION_SOURCE_REF"
           value: "${APPLICATION_SOURCE_REF}"
+        - name: "EXTENDED_ROLES_REPO"
+          value: "${EXTENDED_ROLES_REPO}"
+        - name: "EXTENDED_ROLES_REF"
+          value: "${EXTENDED_ROLES_REF}"
         - name: "BUILD_CONTEXT_DIR"
           value: "${APPLICATION_CONTEXT_DIR}"
         - name: "ANSIBLE_CONTEXT_DIR"
@@ -105,6 +109,13 @@ parameters:
   value: https://github.com/redhat-cop/container-pipelines.git
 - description: Git branch/tag reference
   name: SOURCE_REPOSITORY_REF
+  value: "master"
+- description: Git source URI for extended applier roles
+  name: EXTENDED_ROLES_REPO
+  required: true
+  value: https://github.com/mikes-org/openshift-roles.git
+- description: Git branch/tag reference
+  name: EXTENDED_ROLES_REF
   value: "master"
 - description: Path within Git project to build; empty for root project directory.
   name: CONTEXT_DIR

@@ -34,10 +34,18 @@ objects:
           - name: JWS_ADMIN_PASSWORD
             value: ${JWS_ADMIN_PASSWORD}
           envFrom:
+            - configMapRef:
+                name: config-env
+            
+            - configMapRef:
+                name: config-env-two
+            
             
             
             
           volumeMounts:
+            
+            
             - mountPath:  /var/lib/config
               name: volume-config-mount
             
@@ -62,6 +70,8 @@ objects:
                 |grep -iq 'stateName *= *STARTED'
         terminationGracePeriodSeconds: 60
         volumes:
+            
+            
           - configMap:
               name: config-mount
             name: volume-config-mount
