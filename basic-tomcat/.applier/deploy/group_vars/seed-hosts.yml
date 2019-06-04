@@ -44,6 +44,7 @@ openshift_cluster_content:
       vars:
          src: "{{ inventory_dir }}/../../.openshift/deployment/template.yml.j2"
          destination: "{{ inventory_dir }}/../../.openshift/deployment/template.yml"
+         configMaps: "{{ configmaps_from_files }}"
     namespace: "{{ deploy_setup.dev_project.NAMESPACE }}"
     template: "{{ inventory_dir }}/../../.openshift/deployment/template.yml"
     params: "{{ inventory_dir }}/../../.openshift/deployment/dev/params"

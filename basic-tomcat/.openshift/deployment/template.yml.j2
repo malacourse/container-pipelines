@@ -33,8 +33,8 @@ objects:
             value: ${JWS_ADMIN_USERNAME}
           - name: JWS_ADMIN_PASSWORD
             value: ${JWS_ADMIN_PASSWORD}
-{% if configmaps_from_files is defined %}
-{% for cm in configmaps_from_files %}
+{% if configMaps is defined %}
+{% for cm in configMaps %}
 {% if cm.maptoenv is defined %}
           envFrom:
             - configMapRef:
