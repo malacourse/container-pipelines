@@ -34,8 +34,22 @@ objects:
           - name: JWS_ADMIN_PASSWORD
             value: ${JWS_ADMIN_PASSWORD}
           envFrom:
+            
             - configMapRef:
                 name: config-env
+            
+            
+          envFrom:
+            
+            - configMapRef:
+                name: config-env-two
+            
+            
+            
+          volumeMounts:
+            
+            - mountPath:  /var/lib/config
+              name: volume-config-mount
             
             
             
@@ -57,6 +71,15 @@ objects:
               - curl -s -u ${JWS_ADMIN_USERNAME}:${JWS_ADMIN_PASSWORD} 'http://localhost:8080/manager/jmxproxy/?get=Catalina%3Atype%3DServer&att=stateName'
                 |grep -iq 'stateName *= *STARTED'
         terminationGracePeriodSeconds: 60
+            
+            
+        volumes:
+          - configMap:
+              name: config-mount
+            name: volume-config-mount
+            
+            
+            
     triggers:
     - imageChangeParams:
         automatic: true

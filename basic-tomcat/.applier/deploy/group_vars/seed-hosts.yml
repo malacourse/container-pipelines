@@ -16,6 +16,16 @@ configmaps_from_files:
   properties_file: "{{ WORK_DIR }}/demo/src/main/resources/appdisplay.properties"
   destination: "{{ WORK_DIR }}/demo/.openshift/files"
   maptoenv: true
+- name: config-env-two
+  namespace: "{{ deploy_setup.dev_project.NAMESPACE }}"
+  properties_file: "{{ WORK_DIR }}/demo/src/main/resources/appdisplay.properties"
+  destination: "{{ WORK_DIR }}/demo/.openshift/files"
+  maptoenv: true
+- name: config-mount
+  namespace: "{{ deploy_setup.dev_project.NAMESPACE }}"
+  properties_file: "{{ WORK_DIR }}/demo/src/main/resources/appdisplay.properties"
+  destination: "{{ WORK_DIR }}/demo/.openshift/files"
+  mountpath: "/var/lib/config"
 
 
 openshift_cluster_content:
