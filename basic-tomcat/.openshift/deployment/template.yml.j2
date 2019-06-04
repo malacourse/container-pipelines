@@ -33,21 +33,19 @@ objects:
             value: ${JWS_ADMIN_USERNAME}
           - name: JWS_ADMIN_PASSWORD
             value: ${JWS_ADMIN_PASSWORD}
+          envFrom:
 {% if configMaps is defined %}
 {% for cm in configMaps %}
 {% if cm.maptoenv is defined %}
-{% if envTitleSet is not defined %}
-          envFrom:
-{% set envTitleSet = true %}
-{% endif %}            
             - configMapRef:
                 name: {{ cm.name }}
 {% endif %}            
-{% if cm.mountpath is defined %}
-{% if volumeTitleSet is not defined %}
-          volumeMounts:
-{% set volumeTitleSet = true %}
+{% endfor %}            
 {% endif %}            
+          volumeMounts:
+{% if configMaps is defined %}
+{% for cm in configMaps %}
+{% if cm.mountpath is defined %}
             - mountPath:  {{ cm.mountpath }}
               name: volume-{{ cm.name }}
 {% endif %}            
@@ -71,10 +69,10 @@ objects:
               - curl -s -u ${JWS_ADMIN_USERNAME}:${JWS_ADMIN_PASSWORD} 'http://localhost:8080/manager/jmxproxy/?get=Catalina%3Atype%3DServer&att=stateName'
                 |grep -iq 'stateName *= *STARTED'
         terminationGracePeriodSeconds: 60
+        volumes:
 {% if configMaps is defined %}
 {% for cm in configMaps %}
 {% if cm.mountpath is defined %}
-        volumes:
           - configMap:
               name: {{ cm.name }}
             name: volume-{{ cm.name }}

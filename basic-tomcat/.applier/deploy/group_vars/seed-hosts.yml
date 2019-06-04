@@ -27,7 +27,6 @@ configmaps_from_files:
   destination: "{{ WORK_DIR }}/demo/.openshift/files"
   mountpath: "/var/lib/config"
 
-
 openshift_cluster_content:
 - galaxy_requirements: "{{ inventory_dir }}/../../.openshift/requirements.yml" 
 - object: deployments 
