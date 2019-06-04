@@ -38,7 +38,7 @@ objects:
 {% if cm.maptoenv is defined %}
           envFrom:
             - configMapRef:
-              name: {{ cm.name }}
+                name: {{ cm.name }}
 {% endif %}            
 {% endfor %}            
 {% endif %}            
