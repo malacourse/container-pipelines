@@ -22,16 +22,69 @@ objects:
       type: Recreate
     template:
       metadata:
-        annotations:
-          sidecar.agent.vaultproject.io/inject: "true"
-          sidecar.agent.vaultproject.io/secret-key: secret/example
-          sidecar.agent.vaultproject.io/vault-role: example
+        #annotations:
+        #  sidecar.agent.vaultproject.io/inject: "true"
+        #  sidecar.agent.vaultproject.io/secret-key: secret/example
+        #  sidecar.agent.vaultproject.io/vault-role: example
         labels:
           app: ${APPLICATION_NAME}
           deploymentConfig: ${APPLICATION_NAME}
         name: ${APPLICATION_NAME}
       spec:
         containers:
+{% if addVault is defined %}
+# Vault Agent
+        - args:
+            - agent
+            - '-log-level=debug'
+            - '-config=/vault/config/agent.config'
+          env:
+            - name: SKIP_SETCAP
+              value: 'true'
+            - name: VAULT_ADDR
+              value: 'https://vault.hashicorp-vault.svc:8200'
+            - name: VAULT_CAPATH
+              value: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+          image: 'vault:latest'
+          imagePullPolicy: Always
+          name: vault-agent
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /vault/config/agent.config
+              name: vault-config
+              subPath: agent.config
+            - mountPath: /var/run/secrets/vaultproject.io
+              name: vault-agent-volume
+# Secret Fetcher
+        - args:
+            - start
+          env:
+            - name: LOG_LEVEL
+              value: DEBUG
+            - name: VAULT_ADDR
+              value: 'https://vault.hashicorp-vault.svc:8200'
+            - name: VAULT_CAPATH
+              value: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+            - name: VAULT_TOKEN
+              value: /var/run/secrets/vaultproject.io/token
+            - name: VAULT_SECRET
+              value: secret/example
+            - name: PROPERTIES_FILE
+              value: /var/run/secrets/vaultproject.io/application.json
+            - name: PROPERTIES_TYPE
+              value: json
+          image: vault-secret-fetcher
+          imagePullPolicy: Always
+          name: vault-secret-fetcher
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /var/run/secrets/vaultproject.io
+              name: vault-agent-volume
+{% endif %}            
         - env:
           - name: JWS_ADMIN_USERNAME
             value: ${JWS_ADMIN_USERNAME}
