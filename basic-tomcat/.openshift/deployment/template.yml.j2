@@ -100,6 +100,8 @@ objects:
 {% endfor %}            
 {% endif %}            
           volumeMounts:
+            - mountPath: /var/run/secrets/vaultproject.io
+              name: vault-agent-volume
 {% if configMaps is defined %}
 {% for cm in configMaps %}
 {% if cm.mountpath is defined %}
@@ -144,7 +146,9 @@ objects:
                   path: agent.config
               name: vault-agent-config
             name: vault-config
-{% endif %}            
+          - emptyDir:
+              medium: Memory
+            name: vault-agent-volume{% endif %}            
     triggers:
     - imageChangeParams:
         automatic: true
