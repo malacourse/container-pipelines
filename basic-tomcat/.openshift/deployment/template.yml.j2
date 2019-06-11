@@ -136,6 +136,15 @@ objects:
 {% endif %}            
 {% endfor %}            
 {% endif %}            
+{% if addVault is defined %}
+          - configMap:
+              defaultMode: 420
+              items:
+                - key: vault-agent-config
+                  path: agent.config
+              name: vault-agent-config
+            name: vault-config
+{% endif %}            
     triggers:
     - imageChangeParams:
         automatic: true
